@@ -34,18 +34,40 @@ class Graph:
         for vertex in vertices:
             print(f"Vertex {vertex}: parent is {parents[vertex]}")
 
-        for (vertex, parent) in edges:
+        for (parent, vertex) in edges:
             # adj_matrix[vertex][parent] = round(random.uniform(0.0, 1.0), 2)
             self.adjMatrix[vertex][parent] = 1
+            # self.adjMatrix[parent][vertex] = 1
+
+    def GetRoot(self):
+        return self.root
         
     def Display(self):
         # Print the adjacency matrix
         for row in self.adjMatrix:
             print(row)
-        
-        print(self.root)
+
+    def DFS(self, start):
+        visited = set()
+        stack = [start]
+
+        while stack:
+            vertex = stack.pop()
+            if vertex not in visited:
+                visited.add(vertex)
+                print(vertex)
+
+                # Get the neighbors of the current vertex
+                neighbors = [i for i in range(len(self.adjMatrix[vertex])) if self.adjMatrix[vertex][i] == 1]
+
+                # Add unvisited neighbors to the stack
+                for neighbor in neighbors:
+                    if neighbor not in visited:
+                        stack.append(neighbor)
 
 if __name__ == "__main__":
-    randomTree = Graph(20)
+    numVertices = 10
+    randomTree = Graph(numVertices)
     randomTree.Generate()
     randomTree.Display()
+    randomTree.DFS(randomTree.GetRoot())
